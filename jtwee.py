@@ -3,6 +3,9 @@ import tweepy
 from tweepy import OAuthHandler
 from textblob import TextBlob
  
+NFL_TEAMS = [] 
+
+
 class TwitterClient(object):
     '''
     Generic Twitter Class for sentiment analysis.
@@ -90,6 +93,47 @@ class TwitterClient(object):
 def main():
     # creating object of TwitterClient Class
     api = TwitterClient()
+
+    NFL_TEAMS.append('giants')
+    NFL_TEAMS.append('dallascowboys')
+    NFL_TEAMS.append('redskins')
+    NFL_TEAMS.append('eagles')
+
+    NFL_TEAMS.append('nyjets')
+    NFL_TEAMS.append('patriots')
+    NFL_TEAMS.append('buffalobills')
+    NFL_TEAMS.append('miamidolphins')
+
+    NFL_TEAMS.append('packers')
+    NFL_TEAMS.append('vikings')
+    NFL_TEAMS.append('lions')
+    NFL_TEAMS.append('chicagobears')
+
+    NFL_TEAMS.append('azcardinals')
+    NFL_TEAMS.append('seahawks')
+    NFL_TEAMS.append('ramsnfl')
+    NFL_TEAMS.append('49ers')
+
+    NFL_TEAMS.append('saints')
+    NFL_TEAMS.append('tbbuccaneers')
+    NFL_TEAMS.append('atlantafalcons')
+    NFL_TEAMS.append('panthers')
+
+    NFL_TEAMS.append('steelers')
+    NFL_TEAMS.append('bengals')
+    NFL_TEAMS.append('browns')
+    NFL_TEAMS.append('ravens')
+
+    NFL_TEAMS.append('raiders')
+    NFL_TEAMS.append('broncos')
+    NFL_TEAMS.append('chiefs')
+    NFL_TEAMS.append('chargers')
+
+    NFL_TEAMS.append('titans')
+    NFL_TEAMS.append('colts')
+    NFL_TEAMS.append('houstontexans')
+    NFL_TEAMS.append('jaguars')
+
     # calling function to get tweets
     tweets = api.get_tweets(query = 'Donald Trump', count = 200)
  
