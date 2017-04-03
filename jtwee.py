@@ -60,7 +60,7 @@ class TwitterClient(object):
 		for i, page in enumerate(tweepy.Cursor(self.api.friends_ids, id=self.api.get_user(username).id, count=200).pages()):
 			for userid in page:
 				user = self.api.get_user(userid)
-				print user.screen_name, user.id
+				#print user.screen_name, user.id
 				if user.screen_name.lower() == team:
 					print username, " follows ", team
 					followsTeam = True
@@ -129,6 +129,7 @@ class TwitterClient(object):
 							tweets.append(parsed_tweet)
 					else:
 						tweets.append(parsed_tweet)
+				print "tweet checked"
 
  
 			# return parsed tweets
