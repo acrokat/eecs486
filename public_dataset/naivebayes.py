@@ -87,6 +87,9 @@ def main():
         for line in csv.reader(tsv, dialect="excel-tab"):
             # TODO: preprocess
             tweet_class = line[4]
+            # only include psoitive/negative examples
+            if tweet_class == "objective":
+                break
             tweet_content = line[5]
             tweet = (tweet_content, tweet_class)
             # TODO: replace NUM with how many tweets we want as training
