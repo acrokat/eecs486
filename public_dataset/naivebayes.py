@@ -4,13 +4,13 @@
 import sys
 import copy
 import os
-from preprocess import *
+import tweet_process
 import operator
 import re
-import csv
+import tsv
 
 # Helper to train classifier
-def trainNaiveBayes(files, training_tweets):
+def trainNaiveBayes(training_tweets):
 
     positive_vocab_size = 0
     negative_vocab_size = 0
@@ -22,11 +22,11 @@ def trainNaiveBayes(files, training_tweets):
     negative_count = 0
 
     for tweet in training_tweets:
-
+        tweet_content = tweet[0]
         # calculate counts
         if tweet[1] == "negative":
             negative_count += 1
-            for word in tweet:
+            for word in tweet_content:
                 unique_words.add(word)
                 negative_vocab_size += 1
                 if word in negative_vocab:
@@ -35,7 +35,7 @@ def trainNaiveBayes(files, training_tweets):
                     negative_vocab[word] = 1
         else:
             positive_count += 1
-            for word in new_tokens:
+            for word in tweet_content:
                 unique_words.add(word)
                 positive_vocab_size += 1
                 if word in positive_vocab:
@@ -43,9 +43,9 @@ def trainNaiveBayes(files, training_tweets):
                 else:
                     positive_vocab[word] = 1
 
-    total_docs = len(files)
+    total_tweets = len(training_tweets)
     vocab_size = len(unique_words)
-    class_probs = {"positive": float(positive_count)/float(total_docs), "negative": float(negative_count)/float(total_docs)}
+    class_probs = {"positive": float(positive_count)/float(total_tweets), "negative": float(negative_count)/float(total_tweets)}
     return class_probs, negative_vocab, positive_vocab, vocab_size, positive_vocab_size, negative_vocab_size
 
 # Helper to predict positive or negative for a tweet
@@ -82,31 +82,34 @@ def main():
     out_file = open('tweet_classifier.output','w')
 
     # parse tweets using first 3/4 for training and 1/4 for test
+    NUM = 1220
     count = 0
-    with open(tweet_filename,'r') as tsv:
-        for line in csv.reader(tsv, dialect="excel-tab"):
-            # TODO: preprocess
-            tweet_class = line[4]
-            # only include psoitive/negative examples
-            if tweet_class == "objective":
-                break
-            tweet_content = line[5]
-            tweet = (tweet_content, tweet_class)
-            # TODO: replace NUM with how many tweets we want as training
-            if count < NUM:
-                training_tweets.append(tweet)
-            else:
-                test_tweets.append(tweet)
-            count++
+    reader = tsv.TsvReader(open(tweet_filename))
+    training_tweets = []
+    test_tweets =[]
+    for line in reader:
+        tweet_class = line[1]
+        tweet_string = line[0]
+        tweet_tokens = tweet_string.split()
+        tweet_content = tweet_process.tweet_process(tweet_tokens)
+        tweet = (tweet_content, tweet_class)
+
+        if count < NUM:
+            training_tweets.append(tweet)
+        else:
+            test_tweets.append(tweet)
+        count += 1
     
     # train classifier
     class_probs, negative_vocab, positive_vocab, vocab_size, positive_vocab_size, negative_vocab_size \
-            = trainNaiveBayes(training_files, training_tweets)
+            = trainNaiveBayes(training_tweets)
 
+    correct_count = 0
     for tweet in test_tweets:
+        tweet_tokens = tweet[0]
 
         # run classifier
-        class_result = testNaiveBayes(tweet, negative_vocab, positive_vocab, test_tweets, 
+        class_result = testNaiveBayes(tweet_content, negative_vocab, positive_vocab, 
                 class_probs, vocab_size, positive_vocab_size, negative_vocab_size)
 
         # check for accuracy
@@ -114,9 +117,10 @@ def main():
             correct_count += 1
 
         # output to file
-        out_file.write(tweet + " " + class_result + "\n")
+        tweet_content = ' '.join(tweet_tokens)
+        out_file.write(tweet_content + " " + class_result + "\n")
 
-    print float(correct_count)/float(len(files))
+    print float(correct_count)/float(len(test_tweets))
 
 if __name__  == "__main__":
     main()

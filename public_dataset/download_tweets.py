@@ -8,17 +8,21 @@ import json
 from bs4 import BeautifulSoup
 
 import socket
+reload(sys)
+sys.setdefaultencoding('utf-8')
 socket.setdefaulttimeout(10)
-
+allText =[]
 cache = {}
 
 for line in open(sys.argv[1]):
 	fields = line.rstrip('\n').split('\t')
 	sid = fields[0]
 	uid = fields[1]
-
 	#url = 'http://twitter.com/%s/status/%s' % (uid, sid)
 	#print url
+
+	if fields[4] == "objective":
+		continue
 
         tweet = None
 	text = "Not Available"
@@ -29,7 +33,7 @@ for line in open(sys.argv[1]):
                         f = urllib.urlopen("http://twitter.com/%s/status/%s" % (uid, sid))
                         #Thanks to Arturo!
                         html = f.read().replace("</html>", "") + "</html>"
-                        soup = BeautifulSoup(html)
+                        soup = BeautifulSoup(html, "html.parser")
 
 			jstt   = soup.find_all("p", "js-tweet-text")
 			tweets = list(set([x.get_text() for x in jstt]))
@@ -56,5 +60,8 @@ for line in open(sys.argv[1]):
                 cache[sid] = "Not Available"
         text = text.replace('\n', ' ',)
         text = re.sub(r'\s+', ' ', text)
+        if text not in allText:
+                print text + "\t" + fields[4]
+                allText.append(text)
         #print json.dumps(tweet, indent=2)
-        print "\t".join(fields + [text]).encode('utf-8')
+        #print "\t".join(fields + [text]).encode('utf-8')
