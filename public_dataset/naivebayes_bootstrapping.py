@@ -50,12 +50,13 @@ def trainNaiveBayes(training_tweets):
 
 # Helper to predict positive or negative for a tweet
 def testNaiveBayes(test_tweet, negative_vocab, positive_vocab, class_probs, vocab_size,
-    positive_vocab_size, negative_vocab_size):
+    positive_vocab_size, negative_vocab_size, all_positives, all_negatives):
 
     # calculate probabilities
     negative_prob = class_probs["negative"]
     positive_prob = class_probs["positive"]
 
+    print test_tweet
     for word in test_tweet:
         # negative probs
         count = 1
@@ -70,26 +71,29 @@ def testNaiveBayes(test_tweet, negative_vocab, positive_vocab, class_probs, voca
         positive_prob *= float(count)/float(positive_vocab_size + vocab_size)
 
     if negative_prob > positive_prob:
+        all_negatives[test_tweet] = negative_prob
         return "negative"
     else:
+        all_positives[test_tweet] = positive_prob
         return "positive"
 
 def main():
     # read tweets
     args = list(sys.argv)
     tweet_filename = args[1]
+    all_positives = dict()
+    all_negatives = dict()
     
     out_file = open('tweet_classifier.output','w')
 
     # parse tweets using first 3/4 for training and 1/4 for test
-    NUM = 5668
+    NUM = 6376
     count = 0
     reader = tsv.TsvReader(open(tweet_filename))
     #input_tweet = open(tweet_filename, 'r')
     training_tweets = []
     test_tweets =[]
     for line in reader:
-        print count
         tweet_class = line[1]
         tweet_string = line[0]
         tweet_tokens = tweet_string.split()
@@ -112,7 +116,7 @@ def main():
 
         # run classifier
         class_result = testNaiveBayes(tweet_tokens, negative_vocab, positive_vocab, 
-                class_probs, vocab_size, positive_vocab_size, negative_vocab_size)
+                class_probs, vocab_size, positive_vocab_size, negative_vocab_size, all_positives, all_negatives)
 
         # check for accuracy
         if tweet[1] == class_result:
@@ -123,6 +127,16 @@ def main():
         out_file.write(tweet_content + " " + class_result + "\n")
 
     print float(correct_count)/float(len(test_tweets))
+
+    sorted_x = sorted(all_negatives.items(), key=operator.itemgetter(1))
+    #print sorted_x 
+    ount = 0
+    NUM = 300
+    for pair in sorted_x:
+        if count > NUM:
+            break
+        else:
+            print pair
 
 if __name__  == "__main__":
     main()

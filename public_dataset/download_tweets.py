@@ -21,7 +21,7 @@ for line in open(sys.argv[1]):
 	#url = 'http://twitter.com/%s/status/%s' % (uid, sid)
 	#print url
 
-	if fields[4] == "objective":
+	if fields[4] == "objective" or fields[4] == "neutral":
 		continue
 
         tweet = None
