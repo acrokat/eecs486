@@ -82,7 +82,7 @@ def main():
     out_file = open('tweet_classifier.output','w')
 
     # parse tweets using first 3/4 for training and 1/4 for test
-    NUM = 5668
+    NUM = 8500
     count = 0
     reader = tsv.TsvReader(open(tweet_filename))
     #input_tweet = open(tweet_filename, 'r')
@@ -92,8 +92,8 @@ def main():
         print count
         tweet_class = line[1]
         tweet_string = line[0]
-        tweet_tokens = tweet_string.split()
-        tweet_content = tweet_process.tweet_process(tweet_tokens)
+        #tweet_tokens = tweet_string.split()
+        tweet_content = tweet_process.tweet_process(tweet_string)
         tweet = (tweet_content, tweet_class)
 
         if count < NUM:
