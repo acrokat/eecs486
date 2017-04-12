@@ -1,0 +1,128 @@
+Tweets about @giants
+Positive tweets percentage: 37 %
+Negative tweets percentage: 6 %
+Neutral tweets percentage: 55 % 
+Tweets about @dallascowboys
+Positive tweets percentage: 23 %
+Negative tweets percentage: 7 %
+Neutral tweets percentage: 69 % 
+Tweets about @redskins
+Positive tweets percentage: 25 %
+Negative tweets percentage: 3 %
+Neutral tweets percentage: 71 % 
+Tweets about @eagles
+Positive tweets percentage: 27 %
+Negative tweets percentage: 5 %
+Neutral tweets percentage: 66 % 
+Tweets about @nyjets
+Positive tweets percentage: 25 %
+Negative tweets percentage: 2 %
+Neutral tweets percentage: 72 % 
+Tweets about @patriots
+Positive tweets percentage: 27 %
+Negative tweets percentage: 6 %
+Neutral tweets percentage: 66 % 
+Tweets about @buffalobills
+Positive tweets percentage: 39 %
+Negative tweets percentage: 10 %
+Neutral tweets percentage: 50 % 
+Tweets about @miamidolphins
+Positive tweets percentage: 29 %
+Negative tweets percentage: 8 %
+Neutral tweets percentage: 61 % 
+Tweets about @packers
+Positive tweets percentage: 33 %
+Negative tweets percentage: 9 %
+Neutral tweets percentage: 56 % 
+Tweets about @vikings
+Positive tweets percentage: 42 %
+Negative tweets percentage: 7 %
+Neutral tweets percentage: 50 % 
+Tweets about @lions
+Positive tweets percentage: 32 %
+Negative tweets percentage: 13 %
+Neutral tweets percentage: 54 % 
+Tweets about @chicagobears
+Positive tweets percentage: 28 %
+Negative tweets percentage: 17 %
+Neutral tweets percentage: 53 % 
+Tweets about @azcardinals
+Positive tweets percentage: 43 %
+Negative tweets percentage: 9 %
+Neutral tweets percentage: 46 % 
+Tweets about @seahawks
+Positive tweets percentage: 39 %
+Negative tweets percentage: 9 %
+Neutral tweets percentage: 51 % 
+Tweets about @ramsnfl
+Positive tweets percentage: 34 %
+Negative tweets percentage: 8 %
+Neutral tweets percentage: 56 % 
+Tweets about @49ers
+Positive tweets percentage: 32 %
+Negative tweets percentage: 6 %
+Neutral tweets percentage: 60 % 
+Tweets about @saints
+Positive tweets percentage: 31 %
+Negative tweets percentage: 6 %
+Neutral tweets percentage: 62 % 
+Tweets about @tbbuccaneers
+Positive tweets percentage: 26 %
+Negative tweets percentage: 6 %
+Neutral tweets percentage: 66 % 
+Tweets about @atlantafalcons
+Positive tweets percentage: 50 %
+Negative tweets percentage: 0 %
+Neutral tweets percentage: 50 % 
+Tweets about @panthers
+Positive tweets percentage: 35 %
+Negative tweets percentage: 11 %
+Neutral tweets percentage: 53 % 
+Tweets about @steelers
+Positive tweets percentage: 39 %
+Negative tweets percentage: 7 %
+Neutral tweets percentage: 53 % 
+Tweets about @bengals
+Positive tweets percentage: 34 %
+Negative tweets percentage: 5 %
+Neutral tweets percentage: 60 % 
+Tweets about @browns
+Positive tweets percentage: 26 %
+Negative tweets percentage: 17 %
+Neutral tweets percentage: 55 % 
+Tweets about @ravens
+Positive tweets percentage: 36 %
+Negative tweets percentage: 6 %
+Neutral tweets percentage: 56 % 
+Tweets about @raiders
+Positive tweets percentage: 48 %
+Negative tweets percentage: 14 %
+Neutral tweets percentage: 36 % 
+Tweets about @broncos
+Positive tweets percentage: 31 %
+Negative tweets percentage: 7 %
+Neutral tweets percentage: 61 % 
+Tweets about @chiefs
+Positive tweets percentage: 23 %
+Negative tweets percentage: 10 %
+Neutral tweets percentage: 65 % 
+Tweets about @chargers
+Positive tweets percentage: 16 %
+Negative tweets percentage: 31 %
+Neutral tweets percentage: 51 % 
+Tweets about @titans
+Positive tweets percentage: 38 %
+Negative tweets percentage: 13 %
+Neutral tweets percentage: 48 % 
+Tweets about @colts
+Positive tweets percentage: 41 %
+Negative tweets percentage: 2 %
+Neutral tweets percentage: 55 % 
+Tweets about @houstontexans
+Positive tweets percentage: 41 %
+Negative tweets percentage: 10 %
+Neutral tweets percentage: 48 % 
+Tweets about @jaguars
+Positive tweets percentage: 46 %
+Negative tweets percentage: 2 %
+Neutral tweets percentage: 51 % 
