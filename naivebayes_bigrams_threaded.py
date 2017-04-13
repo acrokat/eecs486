@@ -12,6 +12,7 @@ import operator
 import re
 import tsv
 from multiprocessing import Process, Queue
+import glob
 
 POSITIVE = 1
 NEGATIVE = 0
@@ -45,7 +46,9 @@ def main():
     print "starting"
     args = list(sys.argv)
     tweet_filename = args[1]
-    out_file = open('tweet_classifier.output','w')
+    out_file = open('tweet_classifier_bigrams.output','w')
+
+    team_files = glob.glob(args[2] + '/*')
 
     data = DataFrame({'text': [], 'class': []})
 
@@ -71,8 +74,7 @@ def main():
     for i in range(10):
         data = data.append(dataList[i])
 
-    
-    
+
     #  data = data.reindex(numpy.random.permutation(data.index))
     print "about to do vectorization"
     count_vectorizer = CountVectorizer(ngram_range=(1, 2))
@@ -82,41 +84,48 @@ def main():
     classifier = MultinomialNB()
     targets = numpy.asarray(data['class'])
     classifier.fit(counts, targets)
-    correct_count = 0 
-    test = tsv.TsvReader(open("all_tweets.txt"))
-    total_test = 0
+    correct_count = 0
+
     print "bring classifying"
     examples = list()
-    for tweet in test:
-        tweet_class = tweet[1]
-        tweet_string = tweet[0]
-        examples.append(tweet_string)
-        example_count = count_vectorizer.transform(examples)
-        class_results = classifier.predict(example_count)
-        class_output = class_results[0]
 
-        # check for accuracy
-        if class_output == 1:
-            class_result = "positive"
-        if class_output == 0:
-            class_result = "negative"
-        if tweet_class == class_result:
-            correct_count += 1
-        
-        # check for emoticons
-        #if contains_positive(tweet_content):
-         #   class_result = "positive"
-        #if contains_negative(tweet_content):
-         #   class_result = "negative"
+    scores = {}
 
-        # output to file
-        #tweet_content = ' '.join(tweet_content)
-        out_file.write(tweet_string + " " + class_result + "\n")
-        total_test += 1
-        examples.pop()
+    for f in team_files:
+        team = f[4:-10]  # <-- the next hot emoticon??? 6roundbreaking
 
-    print correct_count
-    print float(correct_count)/float(total_test)
+        test = tsv.TsvReader(open(f))
+        class_count = {'positive': 0, 'negative': 0}
+        total_test = 0
+
+        for tweet in test:
+            #tweet = tweet.split('    ')
+            #tweet_class = tweet[1]
+            tweet_string = tweet[0]
+            examples.append(tweet_string)
+            example_count = count_vectorizer.transform(examples)
+            class_results = classifier.predict(example_count)
+            class_output = class_results[0]
+
+            # check for accuracy
+            if class_output == 1:
+                class_result = "positive"
+            if class_output == 0:
+                class_result = "negative"
+
+            class_count[class_result] += 1
+            total_test += 1
+
+            examples.pop()
+            # output to file
+            #tweet_content = ' '.join(tweet_content)
+        pos_percentage = 100*(float(class_count['positive']) / float(total_test))
+        neg_percentage = 100*(float(class_count['negative']) / float(total_test))
+        scores[team] = {'positive': pos_percentage, 'negative': neg_percentage}
+
+    for team in sorted(scores, key=scores.get('positive'), reverse=True):
+        out_file.write(team + '\t' + '{0:.2f}%'.format(scores[team]['positive']) + ' positive and ' + '{0:.2f}%'.format(scores[team]['negative']) + ' negative\n')
+
 
 if __name__  == "__main__":
     main()
