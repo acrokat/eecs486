@@ -13,6 +13,7 @@ import re
 import tsv
 from multiprocessing import Process, Queue
 import glob
+import threading
 
 POSITIVE = 1
 NEGATIVE = 0
@@ -58,8 +59,8 @@ def main():
     for i in range(10):
         
         fileName = "partition"+str(i)+".txt"
-        build_data_frame(fileName,data)
-        threads.append(Process(target=build_data_frame, args=(fileName,data)))
+        #build_data_frame(fileName,data)
+        threads.append(threading.Thread(target=build_data_frame, args=(fileName,data)))
     print "threads"    
     for i in range(10):
         threads[i].start()
