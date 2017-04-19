@@ -7,7 +7,6 @@ from sets import Set
 import sys
 import copy
 import os
-import tweet_process
 import operator
 import re
 import tsv
@@ -24,11 +23,16 @@ def build_data_frame(tweet_filename,data):
     reader = tsv.TsvReader(open(tweet_filename))
     #input_tweet = open(tweet_filename, 'r')
     count = 0
+    
+    # build dataframe objects for classifier
     for line in reader:
+        if count % 10000 == 0:
+            print count
         tweet_class1 = line[1]
         tweet_string = line[0]
-        #tweet_content = tweet_process.tweet_process(tweet_string)
-        #tweet_string = " ".join(tweet_content)
+        # preprocess
+        tweet_content = tweet_process.tweet_process(tweet_string)
+        tweet_string = " ".join(tweet_content)
         if tweet_class1 == "positive":
             tweet_class = POSITIVE
         if tweet_class1 == "negative":
@@ -56,42 +60,55 @@ def main():
     
     threads = []
     
+    # thread partition files
     for i in range(10):
-        
-        fileName = "partition"+str(i)+".txt"
-        #build_data_frame(fileName,data)
-        threads.append(threading.Thread(target=build_data_frame, args=(fileName,data)))
+        if i == 0 or i == 2 or i == 6 or i == 8:
+		fileName = "partitions/partition"+str(i)+"aReal.txt"
+		fileName2 = "partitions/partition" + str(i)+"bReal.txt"
+		#build_data_frame(fileName,data)
+		threads.append(threading.Thread(target=build_data_frame, args=(fileName,data)))
+    for i in range(10):
+        if i == 0 or i == 2 or i == 6 or i == 8:
+		fileName2 = "partitions/partition" +str(i)+"bReal.txt"
+		threads.append(threading.Thread(target=build_data_frame, args=(fileName2,data)))
     print "threads"    
-    for i in range(10):
+
+    # begin each thread
+    for i in range(len(threads)):
         threads[i].start()
         print "started thread "+str(i)
-    for i in range(10):
+    for i in range(len(threads)):
         threads[i].join()
         print "ended thread "+str(i)
 
 
     print "threads done?"
     print len(dataList)
-    for i in range(10):
+    for i in range(len(dataList)):
         data = data.append(dataList[i])
 
 
     #  data = data.reindex(numpy.random.permutation(data.index))
     print "about to do vectorization"
-    count_vectorizer = CountVectorizer(ngram_range=(1, 2))
+    #count_vectorizer = CountVectorizer(ngram_range=(1, 2))
+    count_vectorizer = CountVectorizer()
+    print " count V 1 done"
     #count_vectorizer = CountVectorizer()
-    print data
+    #print data
     counts = count_vectorizer.fit_transform(numpy.asarray(data['text']))
+    print "more done"
     classifier = MultinomialNB()
     targets = numpy.asarray(data['class'])
+    print "so far!"
     classifier.fit(counts, targets)
     correct_count = 0
 
-    print "bring classifying"
+    print "begin classifying"
     examples = list()
 
     scores = {}
 
+    # loop through NFL/ team files
     for f in team_files:
         team = f[4:-10]  # <-- the next hot emoticon??? 6roundbreaking
 
@@ -99,6 +116,7 @@ def main():
         class_count = {'positive': 0, 'negative': 0}
         total_test = 0
 
+        # classify each tweet
         for tweet in test:
             #tweet = tweet.split('    ')
             #tweet_class = tweet[1]
@@ -126,6 +144,44 @@ def main():
 
     for team in sorted(scores, key=scores.get('positive'), reverse=True):
         out_file.write(team + '\t' + '{0:.2f}%'.format(scores[team]['positive']) + ' positive and ' + '{0:.2f}%'.format(scores[team]['negative']) + ' negative\n')
+
+    print "accuracy"
+    
+    test = tsv.TsvReader(open("all_tweets.txt"))
+    total_test = 0
+    print "bring classifying"
+    examples = list()
+    # read and classify each test tweet
+    for tweet in test:
+        tweet_class = tweet[1]
+        tweet_string = tweet[0]
+        examples.append(tweet_string)
+        example_count = count_vectorizer.transform(examples)
+        class_results = classifier.predict(example_count)
+        class_output = class_results[0]
+
+        # check for accuracy
+        if class_output == 1:
+            class_result = "positive"
+        if class_output == 0:
+            class_result = "negative"
+        if tweet_class == class_result:
+            correct_count += 1
+        
+        # check for emoticons
+        #if contains_positive(tweet_content):
+         #   class_result = "positive"
+        #if contains_negative(tweet_content):
+         #   class_result = "negative"
+
+        # output to file
+        #tweet_content = ' '.join(tweet_content)
+        #out_file.write(tweet_string + " " + class_result + "\n")
+        total_test += 1
+        examples.pop()
+
+    print correct_count
+    print float(correct_count)/float(total_test)
 
 
 if __name__  == "__main__":
